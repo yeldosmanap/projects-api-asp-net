@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProductsAPI.Application.Contract.Services;
+using ProductsAPI.Domain.Entities;
 using ProjectsAPI.DTO.Task;
 
 namespace ProductsAPI.Api.Controllers;
@@ -18,7 +19,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Task>))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EntityTask>))]
     public async Task<IActionResult> GetAll()
     {
         _logger.LogInformation("Getting all tasks");
@@ -28,7 +29,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Task))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EntityTask))]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         _logger.LogInformation("Getting a task by id");
@@ -47,7 +48,7 @@ public class TasksController : ControllerBase
     }
 
     [HttpDelete]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Task))]
+    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(EntityTask))]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         _logger.LogInformation("Deleting a task");

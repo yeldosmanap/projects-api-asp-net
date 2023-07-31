@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using ProductsAPI.Domain.Entities;
 
-namespace ProductsAPI.Persistence;
+namespace ProductsAPI.Persistence.Context;
 
 public class DataContext : DbContext
 {
@@ -12,8 +12,12 @@ public class DataContext : DbContext
     
     public DbSet<EntityTask> Tasks { get; set; } = null!;
 
-    public DataContext(DbContextOptions<DataContext> options, IConfiguration configuration) 
-        : base(options)
+    public DataContext()
+    {
+        
+    }
+
+    public DataContext(IConfiguration configuration) 
     {
         _configuration = configuration;
     }

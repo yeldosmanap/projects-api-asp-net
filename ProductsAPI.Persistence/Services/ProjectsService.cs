@@ -27,7 +27,7 @@ public class ProjectsService : IProjectService
             throw new EntityNotFoundException($"Project with id {projectId} not found");
         }
 
-        project.Tasks = _tasksBaseRepository.GetTasksByProjectId(projectId).Result.ToList();
+        project.Tasks = await _tasksBaseRepository.GetTasksByProjectId(projectId);
 
         return project;
     }
@@ -53,7 +53,7 @@ public class ProjectsService : IProjectService
 
     public async Task<Project> Update(Guid projectId, UpdateProjectDto updateProjectDto)
     {
-        var project = await _projectsBaseRepository.GetByIdAsync(projectId) ?? throw new InvalidOperationException();
+        var project = await _projectsBaseRepository.GetByIdAsync(projectId);
         if (project == null)
         {
             throw new EntityNotFoundException($"Project with id {projectId} not found");

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ProductsAPI.Application.Contract.Persistence;
 using ProductsAPI.Application.Contract.Services;
 using ProductsAPI.Domain.Entities;
-using ProductsAPI.Persistence;
+using ProductsAPI.Persistence.Context;
 using ProductsAPI.Persistence.Repositories;
 using ProductsAPI.Persistence.Services;
 using Serilog;
@@ -18,9 +18,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // Add DataContext
-builder.Services.AddDbContext<DataContext>(o => o.UseNpgsql(builder.
-    Configuration.GetConnectionString("Default")));
-
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
 
 // Add ProjectsRepository layer
 builder.Services.AddScoped<IProjectRepository<Project>, ProjectsRepository>();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductsAPI.Application.Contract.Persistence;
 using ProductsAPI.Domain.Exceptions;
+using ProductsAPI.Persistence.Context;
 
 namespace ProductsAPI.Persistence.Repositories;
 
@@ -8,7 +9,7 @@ public class BaseRepository<T> : IAsyncRepository<T> where T : class
 {
     protected readonly DataContext DataContext;
 
-    protected BaseRepository(DataContext dataContext)
+    public BaseRepository(DataContext dataContext)
     {
         DataContext = dataContext;
     }
