@@ -1,10 +1,9 @@
 ﻿using ProductsAPI.Application.Contract.Persistence;
-using ProductsAPI.Application.Contract.Services;
 using ProductsAPI.Domain.Entities;
 using ProductsAPI.Domain.Exceptions;
 using ProjectsAPI.DTO.Task;
 
-namespace ProductsAPI.Persistence.Services;
+namespace ProductsAPI.Application.Services.Tasks;
 
 public class TasksService : ITaskService
 {

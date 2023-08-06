@@ -1,7 +1,7 @@
 ﻿using ProductsAPI.Domain.Entities;
 using ProjectsAPI.DTO.Task;
 
-namespace ProductsAPI.Application.Contract.Services;
+namespace ProductsAPI.Application.Services.Tasks;
 
 public interface ITaskService : IService<EntityTask>
 {

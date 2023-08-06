@@ -1,12 +1,11 @@
 ﻿using ProductsAPI.Application.Contract.Persistence;
-using ProductsAPI.Application.Contract.Services;
 using ProductsAPI.Application.DTO.Project;
 using ProductsAPI.Application.DTO.Task;
 using ProductsAPI.Domain.Entities;
 using ProductsAPI.Domain.Exceptions;
 using ProjectsAPI.DTO.Project;
 
-namespace ProductsAPI.Persistence.Services;
+namespace ProductsAPI.Application.Services.Projects;
 
 public class ProjectsService : IProjectService
 {

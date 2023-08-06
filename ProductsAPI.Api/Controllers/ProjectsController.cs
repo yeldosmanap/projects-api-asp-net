@@ -1,13 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ProductsAPI.Application.Contract.Services;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProductsAPI.Application.DTO.Project;
 using ProductsAPI.Application.DTO.Task;
+using ProductsAPI.Application.Services.Projects;
 using ProductsAPI.Domain.Entities;
 using ProductsAPI.Domain.Exceptions;
 using ProjectsAPI.DTO.Project;
 
 namespace ProductsAPI.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class ProjectsController : ControllerBase
@@ -23,7 +25,7 @@ public class ProjectsController : ControllerBase
     
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Project>))]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(void))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetAll()
     {
         try
@@ -43,7 +45,7 @@ public class ProjectsController : ControllerBase
     
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Project))]
-    [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(void))]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById([FromRoute] Guid id)
     {
         try
@@ -62,7 +64,7 @@ public class ProjectsController : ControllerBase
     }
     
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Project))]
+    [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(CreateProjectDto))]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Add([FromBody] CreateProjectDto createProjectDto)
     {
@@ -71,7 +73,7 @@ public class ProjectsController : ControllerBase
             _logger.LogInformation("Adding a project");
             var project = await _projectsService.Add(createProjectDto);
 
-            return CreatedAtAction(nameof(Add), new {id = project.Id, createdAt = project.DateCreated}, project);
+            return CreatedAtAction(nameof(Add), new {id = project.Id, createdAt = project.DateCreated}, createProjectDto);
         } 
         catch (Exception e)
         {
@@ -83,7 +85,7 @@ public class ProjectsController : ControllerBase
     
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Project))]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(void))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Update(
         [FromRoute] Guid id, 
         [FromBody] UpdateProjectDto updateProjectDto)
@@ -91,9 +93,9 @@ public class ProjectsController : ControllerBase
         try
         {
             _logger.LogInformation("Updating a project");
-            var project = await _projectsService.Update(id, updateProjectDto);
+            await _projectsService.Update(id, updateProjectDto);
 
-            return Ok(project);
+            return NoContent();
         }
         catch (Exception e)
         {
@@ -105,15 +107,15 @@ public class ProjectsController : ControllerBase
     
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Project))]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(void))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Delete([FromRoute] Guid id)
     {
         try
         {
             _logger.LogInformation("Deleting a project");
-            var project = await _projectsService.Delete(id);
+            await _projectsService.Delete(id);
 
-            return Ok(project);
+            return NoContent();
         } 
         catch (Exception e)
         {
@@ -125,7 +127,7 @@ public class ProjectsController : ControllerBase
     
     [HttpPost("{projectId:guid}/Tasks")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Project))]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(void))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> AddTask([FromRoute] Guid projectId, [FromBody] CreateTaskDto createTaskDto)
     {
         try
@@ -133,7 +135,7 @@ public class ProjectsController : ControllerBase
             _logger.LogInformation("Adding a task to project");       
             var project = await _projectsService.AddTaskToProject(projectId, createTaskDto);
 
-            return Ok(project);
+            return CreatedAtAction(nameof(AddTask), new {projectId = project.Id}, createTaskDto);
         } 
         catch (Exception e)
         {
@@ -145,7 +147,7 @@ public class ProjectsController : ControllerBase
     
     [HttpGet("{projectId:guid}/Tasks")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EntityTask>))]
-    [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(void))]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> GetTasks([FromRoute] Guid projectId)
     {
         try
@@ -157,7 +159,7 @@ public class ProjectsController : ControllerBase
         } 
         catch (Exception e)
         {
-            _logger.LogError(e, "Error while getting tasks of project");
+            _logger.LogError(e, "Error while getting tasks of projec    t");
             
             return StatusCode(StatusCodes.Status500InternalServerError);
         }

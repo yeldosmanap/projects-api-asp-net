@@ -1,11 +1,13 @@
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using ProductsAPI.Application.Contract.Persistence;
-using ProductsAPI.Application.Contract.Services;
+using ProductsAPI.Application.Services.Projects;
+using ProductsAPI.Application.Services.Tasks;
 using ProductsAPI.Domain.Entities;
 using ProductsAPI.Persistence.Context;
 using ProductsAPI.Persistence.Repositories;
-using ProductsAPI.Persistence.Services;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +44,14 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Host.UseSerilog((context, configuration) => 
     configuration.ReadFrom.Configuration(context.Configuration));
 
+builder.Services.AddAuthentication(services =>
+{
+
+    services.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    services.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    services.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+});
+
 var app = builder.Build();
 
 // Add CORS policies
@@ -61,6 +71,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -3,7 +3,7 @@ using ProductsAPI.Application.DTO.Task;
 using ProductsAPI.Domain.Entities;
 using ProjectsAPI.DTO.Project;
 
-namespace ProductsAPI.Application.Contract.Services;
+namespace ProductsAPI.Application.Services.Projects;
 
 public interface IProjectService : IService<Project>
 {

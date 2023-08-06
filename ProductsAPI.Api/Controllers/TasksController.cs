@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProductsAPI.Application.Contract.Services;
+using ProductsAPI.Application.Services.Tasks;
 using ProductsAPI.Domain.Entities;
 using ProjectsAPI.DTO.Task;
 
